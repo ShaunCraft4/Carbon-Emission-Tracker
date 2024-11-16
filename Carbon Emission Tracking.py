@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import openai
 
-openai.api_key = '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'  # Replace with your actual API key
+openai.api_key = 'YOUR_OPENAI_KEY'  # Replace with your actual API key
 
 def Inputs():
     vehicle_driven = vehicle_var.get()
