@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import openai
 
-openai.api_key = 'YOUR_OPENAI_KEY'  # Replace with your actual API key
+openai.api_key = 'YOUR_OPENAI_KEY'  #Replace with your actual API key
 
 def Inputs():
     vehicle_driven = vehicle_var.get()
@@ -16,7 +16,7 @@ def Inputs():
     return [miles_driven, electricity_usage, calorie_intake, vehicle_driven, diet]
 
 def Output(I):
-    # Electricity
+    #Electricity
     co2_electricity = (I[1] * 500) / 1000  #Unit of CF(500) is gCO2/mile
     if co2_electricity < 200:
         electricity_feedback = "Electricity: Good"
@@ -25,7 +25,7 @@ def Output(I):
     else:
         electricity_feedback = "Electricity: Bad"
 
-    # Calories
+    #Calories
     diet = I[-1]
     if diet == "Plant":
         CF = 0.4 #Unit is gCo2/mile
@@ -41,7 +41,7 @@ def Output(I):
     else:
         calorie_feedback = "Calories: Bad"
 
-    # Miles
+    #Miles
     vehicle_driven = I[-2]
     if vehicle_driven == "Electric":
         CF = 0.025  #Unit is kgCO2/mile
@@ -57,7 +57,7 @@ def Output(I):
     else:
         miles_feedback = "Miles: Bad"
 
-    # Clear previous advice
+    #Clear previous advice
     advice_text.set("")
 
     result_text.set(f"{electricity_feedback}\n{calorie_feedback}\n{miles_feedback}\n"
@@ -68,20 +68,19 @@ def Output(I):
     return [co2_electricity, co2_calorie, co2_miles]
 
 def Graphs(C):
-    # Clear the previous graph if any
+    #Clear the previous graph if any
     for widget in graph_frame.winfo_children():
         widget.destroy()
-
     fig, axes = plt.subplots(1, 2, figsize=(10, 4))
 
-    # Pie Chart
+    #Pie Chart
     Values = np.array([C[0], C[1], C[2]])
     Labels = ["Electricity Usage", "Calorie Intake", "Miles Driven"]
     colors = ['#ff9999', '#66b3ff', '#99ff99']
     axes[0].pie(Values, labels=Labels, autopct='%1.1f%%', startangle=140, colors=colors, shadow=True)
     axes[0].set_title('Carbon Emissions Breakdown')
 
-    # Bar Graph
+    #Bar Graph
     Labels = ["Electricity Usage", "Calorie Intake", "Miles Driven"]
     bars = axes[1].bar(Labels, C, color=colors)
     for bar in bars:
@@ -89,13 +88,13 @@ def Graphs(C):
         axes[1].text(bar.get_x() + bar.get_width() / 2, yval, round(yval, 6), ha='center', va='bottom', fontsize=10)
     axes[1].set_title('Carbon Emissions (kg CO2)')
 
-    # Draw the figure in the Tkinter window
+    #Draw the figure in the Tkinter window
     canvas = FigureCanvasTkAgg(fig, master=graph_frame)
     canvas.draw()
     canvas.get_tk_widget().pack()
 
 def Advice(C):
-    # Clear the previous graph if any
+    #Clear the previous graph if any
     for widget in graph_frame.winfo_children():
         widget.destroy()
     
@@ -105,44 +104,42 @@ def Advice(C):
         messages=[{"role": "user", "content": prompt}]
     )
 
-    # Clear previous result
+    #Clear previous result
     result_text.set("")
 
     advice_text.set(response.choices[0].message['content'])
 
 def calculate():
-    # Clear the advice text
+    #Clear the advice text
     advice_text.set("")
-
     I = Inputs()
     C = Output(I)
     Graphs(C)
 
 def ask_advice():
-    # Clear the result text
+    #Clear the result text
     result_text.set("")
-
     I = Inputs()
     C = Output(I)
     Advice(C)
 
-# Set up the main application window
+#Set up the main application window
 root = tk.Tk()
 root.title("Carbon Footprint Tracker")
 root.configure(bg='#f0f4f7')
 
-# Fullscreen
+#Fullscreen
 root.attributes('-fullscreen', True)
 
-# Frame
+#Frame
 frame = tk.Frame(root, bg='#ffffff', highlightbackground="#b3cde0", highlightthickness=2)
 frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
 
-# Title
+#Title
 title_label = tk.Label(frame, text="Carbon Footprint Tracker", bg='#ffffff', fg='#2a4d69', font=('Arial', 28, 'bold'))
 title_label.pack(pady=(10, 20))
 
-# User input fields
+#User input fields
 input_frame = tk.Frame(frame, bg='#ffffff')
 input_frame.pack(pady=10)
 
@@ -166,7 +163,7 @@ tk.Label(input_frame, text="Calorie Intake:", bg='#ffffff', fg='#4b86b4', font=(
 calories_entry = tk.Entry(input_frame, font=('Arial', 14))
 calories_entry.grid(row=4, column=1, padx=10)
 
-# Buttons for calculations and advice with styling
+#Buttons for calculations and advice with styling
 button_frame = tk.Frame(frame, bg='#ffffff')
 button_frame.pack(pady=20)
 
@@ -176,7 +173,7 @@ calculate_button.pack(side=tk.LEFT, padx=10)
 advice_button = tk.Button(button_frame, text="Get Advice", command=ask_advice, bg='#b3cde0', fg='white', font=('Arial', 14), relief='raised', padx=10)
 advice_button.pack(side=tk.LEFT, padx=10)
 
-# Frame for displaying results and advice
+#Frame for displaying results and advice
 output_frame = tk.Frame(frame, bg='#ffffff')
 output_frame.pack(pady=20)
 
@@ -188,13 +185,13 @@ advice_text = tk.StringVar()
 advice_label = tk.Label(output_frame, textvariable=advice_text, bg='#ffffff', fg='#00796b', font=('Arial', 16), justify="left", wraplength=800)
 advice_label.pack()
 
-# Frame for displaying graphs
+#Frame for displaying graphs
 graph_frame = tk.Frame(frame, bg='#ffffff')
 graph_frame.pack(pady=20)
 
-# Exit button at the top-right corner
+#Exit button at the top-right corner
 exit_button = tk.Button(frame, text="X", command=root.destroy, bg='red', fg='white', font=('Arial', 14), width=3, relief='flat')
 exit_button.place(relx=0.97, rely=0.02, anchor="ne")
 
-# Start the Tkinter main loop
+#Start the Tkinter main loop
 root.mainloop()
