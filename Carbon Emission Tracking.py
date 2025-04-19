@@ -118,6 +118,7 @@ root = tk.Tk()
 root.title("Carbon Footprint Tracker")
 root.configure(bg='#f0f4f7')
 root.attributes('-fullscreen', True)
+
 frame = tk.Frame(root, bg='#ffffff', highlightbackground="#b3cde0", highlightthickness=2)
 frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
 title_label = tk.Label(frame, text="Carbon Footprint Tracker", bg='#ffffff', fg='#2a4d69', font=('Arial', 28, 'bold'))
